@@ -31,19 +31,22 @@ public Optional<Users> getById(UUID id){
 }
 
 public Users saveUser(Users usr){
+	Users savedUser = usrpo.save(usr);
 	if(usr.getRole().equals("COSTUMER")) {
 		Costumers cos = new Costumers();
-		cos.setUserId(usr.getId());
+		cos.setUserId(savedUser.getId());
+		
 		cos.setName(usr.getName());
 		cosrepo.save(cos);
 	}
 	if(usr.getRole().equals("FOOD-PARTNER")) {
 		FoodPartner fp = new  FoodPartner();
-		fp.setUserId(usr.getId());
+		fp.setUserId(savedUser.getId());
+		
 		fp.setName(usr.getName());
 		fdrepo.save(fp);
 	}
-	return usrpo.save(usr);
+	return savedUser;
 }
 
 public Users getByEmail(String email){
