@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -149,7 +150,11 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<Object> login(@RequestParam String email, @RequestParam String password){
 		try {
-		
+			Users u = usrS.getByEmail(email);
+		       
+	        if (u == null) {
+	        	return new ResponseEntity<Object>("User not exist",HttpStatus.BAD_REQUEST);
+	        }
 			this.doAuthenticate(email, password);
 			
 			boolean isCostumer = false;
@@ -171,7 +176,7 @@ public class AuthController {
 					isCostumer = true;
 				} else if ("ROLE_FOOD-PARTNER".equals(role)) {
 					isFoodPartner = true;
-				}else if(isAdmin) {
+				}else if("ROLE_ADMIN".equals(role)) {
 					isAdmin = true;
 				}
 			}
@@ -187,7 +192,9 @@ public class AuthController {
 				
 			}
 			else if(isAdmin) {
+				System.out.println("Admin exist");
 				token = tokenHelper.generateToken(user);
+				System.out.println(token);
 			}
 			return new ResponseEntity<>(token,HttpStatus.OK);	
 			

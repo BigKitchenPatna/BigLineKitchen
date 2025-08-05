@@ -25,4 +25,7 @@ public Optional<Foods> getById(UUID id){
 public List<Foods> getByAll(){
 	return fdr.findAll();
 }
+public List<Foods> findByName(String name){
+	return fdr.findByName(name);
+}
 }

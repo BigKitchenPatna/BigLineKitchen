@@ -12,4 +12,5 @@ import com.food.service.entities.Foods;
 public interface FoodsRepo extends JpaRepository<Foods, UUID>{
 List<Foods> findAll();
 Optional<Foods> findById(UUID id);
+List<Foods> findByName(String name);
 }
